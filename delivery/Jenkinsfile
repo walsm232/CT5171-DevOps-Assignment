@@ -17,7 +17,7 @@ pipeline {
                 sh '''
                     docker build . \
                     -t ct5171-devops-assignment:latest \
-                    -t ct5171-devops-assignment:${env.BUILD_NUMBER}
+                    -t ct5171-devops-assignment:${BUILD_NUMBER}
                 '''
             }
         }
