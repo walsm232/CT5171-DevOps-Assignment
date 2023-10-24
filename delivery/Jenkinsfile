@@ -15,9 +15,15 @@ pipeline {
         stage ("Build Image") {
             steps {
                 sh '''
-                    docker build . \
+                    DOCKER_BUILDKIT=1 docker build . \
                     -t ct5171-devops-assignment:latest \
                     -t ct5171-devops-assignment:${BUILD_NUMBER}
+
+                    docker tag ct5171-devops-assignment:latest 494026421561.dkr.ecr.eu-west-1.amazonaws.com/ct5171-devops-assignment:latest
+                    docker tag ct5171-devops-assignment:${BUILD_NUMBER} 494026421561.dkr.ecr.eu-west-1.amazonaws.com/ct5171-devops-assignment:${BUILD_NUMBER}
+
+                    docker push 494026421561.dkr.ecr.eu-west-1.amazonaws.com/ct5171-devops-assignment:latest
+                    docker push 494026421561.dkr.ecr.eu-west-1.amazonaws.com/ct5171-devops-assignment:${BUILD_NUMBER}
                 '''
             }
         }
