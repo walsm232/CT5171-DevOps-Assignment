@@ -13,4 +13,10 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            archiveArtifacts allowEmptyArchive: true,
+            artifacts: "target/*.war", fingerprint: true
+        }
+    }
 }
