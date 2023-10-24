@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+     environment {
+         AWS_REGION="eu-west-1"
+         IMAGE_REPOSITORY_NAME="ct5171-devops-assignment"
+     }
+
     stages {
         stage ("Clone Project") {
             steps {
@@ -12,19 +17,28 @@ pipeline {
                 sh "mvn clean install"
             }
         }
-        stage ("Build Image") {
+        stage ("Login to AWS ECR") {
             steps {
-                sh '''
-                    DOCKER_BUILDKIT=1 docker build . \
-                    -t ct5171-devops-assignment:latest \
-                    -t ct5171-devops-assignment:${BUILD_NUMBER}
+                withCredentials([string(credentialsId: 'aws-account-id', variable: 'AWS_ACCOUNT_ID')]) {
+                    sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS - password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+                }
+            }
+        }
+        stage ("Build Image and Push to ECR") {
+            steps {
+                withCredentials([string(credentialsId: 'aws-account-id', variable: 'AWS_ACCOUNT_ID')]) {
+                    sh '''
+                        DOCKER_BUILDKIT=1 docker build . \
+                        -t ct5171-devops-assignment:latest \
+                        -t ct5171-devops-assignment:${BUILD_NUMBER}
 
-                    docker tag ct5171-devops-assignment:latest 494026421561.dkr.ecr.eu-west-1.amazonaws.com/ct5171-devops-assignment:latest
-                    docker tag ct5171-devops-assignment:${BUILD_NUMBER} 494026421561.dkr.ecr.eu-west-1.amazonaws.com/ct5171-devops-assignment:${BUILD_NUMBER}
+                        docker tag ct5171-devops-assignment:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ct5171-devops-assignment:latest
+                        docker tag ct5171-devops-assignment:${BUILD_NUMBER} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ct5171-devops-assignment:${BUILD_NUMBER}
 
-                    docker push 494026421561.dkr.ecr.eu-west-1.amazonaws.com/ct5171-devops-assignment:latest
-                    docker push 494026421561.dkr.ecr.eu-west-1.amazonaws.com/ct5171-devops-assignment:${BUILD_NUMBER}
-                '''
+                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ct5171-devops-assignment:latest
+                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ct5171-devops-assignment:${BUILD_NUMBER}
+                    '''
+                }
             }
         }
     }
