@@ -7,9 +7,18 @@ pipeline {
                 git "https://github.com/walsm232/CT5171-DevOps-Assignment.git"
             }
         }
-        stage ("Build") {
+        stage ("Build Package") {
             steps {
                 sh "mvn clean install"
+            }
+        }
+        stage ("Build Image") {
+            steps {
+                sh '''
+                    docker build . \
+                    -t ct5171-devops-assignment:latest \
+                    -t ct5171-devops-assignment:${env.BUILD_NUMBER}
+                '''
             }
         }
     }
