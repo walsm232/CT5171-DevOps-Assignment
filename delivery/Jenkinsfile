@@ -16,14 +16,12 @@ pipeline {
         }
         stage ("Build") {
             steps {
-                sh "mvn clean:clean"
-                sh "mvn dependency:copy-dependencies"
-                sh "mvn compiler:compile"
+                sh "mvn clean install"
             }
         }
         stage ("Exec") {
             steps {
-                sh "mvn exec:java"
+                sh "mvn spring-boot:run"
             }
         }
     }
