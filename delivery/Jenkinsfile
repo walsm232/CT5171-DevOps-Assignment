@@ -7,21 +7,9 @@ pipeline {
                 git "https://github.com/walsm232/CT5171-DevOps-Assignment.git"
             }
         }
-        stage ("Unit Test") {
-            steps {
-                script {
-                    echo "Testing the GitHub webhook configuration"
-                }
-            }
-        }
         stage ("Build") {
             steps {
-                sh "mvn clean install -DskipTests"
-            }
-        }
-        stage ("Exec") {
-            steps {
-                sh "mvn spring-boot:run"
+                sh "mvn clean install"
             }
         }
     }
