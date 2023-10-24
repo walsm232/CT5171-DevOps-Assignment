@@ -7,11 +7,6 @@ pipeline {
      }
 
     stages {
-        stage ("Clone Project") {
-            steps {
-                git "https://github.com/walsm232/CT5171-DevOps-Assignment.git"
-            }
-        }
         stage ("Build Package") {
             steps {
                 sh "mvn clean install"
@@ -41,14 +36,10 @@ pipeline {
                 withCredentials([string(credentialsId: 'aws-account-id', variable: 'AWS_ACCOUNT_ID')]) {
                     sh '''
                         DOCKER_BUILDKIT=1 docker build . \
-                        -t ct5171-devops-assignment:latest \
-                        -t ct5171-devops-assignment:${BUILD_NUMBER}
+                        -t ct5171-devops-assignment:latest
 
                         docker tag ct5171-devops-assignment:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/ct5171-devops-assignment:latest
-                        docker tag ct5171-devops-assignment:${BUILD_NUMBER} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/ct5171-devops-assignment:${BUILD_NUMBER}
-
                         docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/ct5171-devops-assignment:latest
-                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/ct5171-devops-assignment:${BUILD_NUMBER}
                     '''
                 }
             }
