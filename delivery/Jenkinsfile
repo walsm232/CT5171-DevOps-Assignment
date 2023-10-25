@@ -13,53 +13,66 @@ pipeline {
     stages {
         stage ("Build Package") {
             steps {
-                sh "mvn clean install"
+                timeout(time: 10, unit: 'MINUTES') {
+                    sh "mvn clean install"
+                }
             }
         }
         stage ("Login to AWS ECR") {
             steps {
-                sh '''
-                    aws ecr get-login-password \
-                        --region ${AWS_DEFAULT_REGION} | docker login \
-                        --username AWS \
-                        --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
-                '''
+                timeout(time: 1, unit: 'MINUTES') {
+                    sh '''
+                        aws ecr get-login-password \
+                            --region ${AWS_DEFAULT_REGION} | docker login \
+                            --username AWS \
+                            --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+                    '''
+                }
             }
         }
         stage ("Build Docker Image and Push to Registry") {
             steps {
-                sh '''
-                    DOCKER_BUILDKIT=1 docker build . \
-                        -t ${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
-
-                    docker tag ${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
-                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
-                '''
+                timeout(time: 5, unit: 'MINUTES') {
+                    sh '''
+                        DOCKER_BUILDKIT=1 docker build . \
+                            -t ${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
+    
+                        docker tag ${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
+                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
+                    '''
+                }
             }
         }
         stage('Deployment Confirmation') {
             steps {
-                input(message: 'Do you want to deploy?', parameters: [
-                        [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Deploy', name: 'DEPLOY']
-                ])
+                timeout(time: 15, unit: 'MINUTES') {
+                    script {
+                        def userInput = input(
+                                id: 'deployConfirmation',
+                                message: 'Do you want to deploy?',
+                                parameters: [
+                                        [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Deploy', name: 'DEPLOY']
+                                ]
+                        )
+
+                        if (userInput == null) {
+                            error('Deployment confirmation timeout')
+                        }
+
+                        env.DEPLOY = userInput
+                    }
+                }
             }
         }
-        stage ("Kill and Remove All Containers") {
-            expression {
-                params.DEPLOY == true
+        stage ("Deploy Container") {
+            when {
+                expression {
+                    env.DEPLOY == true
+                }
             }
             steps {
                 sh '''
                     docker ps -aq | xargs docker stop | xargs docker rm
-                '''
-            }
-        }
-        stage ("Run Tomcat Server") {
-            expression {
-                params.DEPLOY == true
-            }
-            steps {
-                sh '''
                     docker run -itd -p 9090:9090 ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
                 '''
             }
