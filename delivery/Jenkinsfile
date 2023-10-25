@@ -1,9 +1,12 @@
 pipeline {
     agent any
 
-     environment {
-         AWS_DEFAULT_REGION="eu-west-1"
-         IMAGE_REPOSITORY_NAME="ct5171-devops-assignment"
+    environment {
+        AWS_ACCOUNT_ID = credentials("aws-account-id")
+        AWS_ACCESS_KEY_ID = credentials("aws-access-key")
+        AWS_SECRET_ACCESS_KEY_ID = credentials("aws-secret-access-key")
+        AWS_DEFAULT_REGION = "eu-west-1"
+        IMAGE_REPOSITORY_NAME = "ct5171-devops-assignment"
      }
 
     stages {
@@ -14,34 +17,23 @@ pipeline {
         }
         stage ("Login to AWS ECR") {
             steps {
-                withCredentials([
-                    string(credentialsId: 'aws-account-id', variable: 'AWS_ACCOUNT_ID'),
-                    string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
-                    string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
-                ]) {
-                    sh '''
-                        export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
-                        export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
-
-                        aws ecr get-login-password \
-                            --region ${AWS_DEFAULT_REGION} | docker login \
-                            --username AWS \
-                            --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
-                    '''
-                }
+                sh '''
+                    aws ecr get-login-password \
+                        --region ${AWS_DEFAULT_REGION} | docker login \
+                        --username AWS \
+                        --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+                '''
             }
         }
         stage ("Build Image and Push to ECR") {
             steps {
-                withCredentials([string(credentialsId: 'aws-account-id', variable: 'AWS_ACCOUNT_ID')]) {
-                    sh '''
-                        DOCKER_BUILDKIT=1 docker build . \
-                        -t ct5171-devops-assignment:latest
+                sh '''
+                    DOCKER_BUILDKIT=1 docker build . \
+                    -t ct5171-devops-assignment:latest
 
-                        docker tag ct5171-devops-assignment:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/ct5171-devops-assignment:latest
-                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/ct5171-devops-assignment:latest
-                    '''
-                }
+                    docker tag ct5171-devops-assignment:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/ct5171-devops-assignment:latest
+                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/ct5171-devops-assignment:latest
+                '''
             }
         }
     }
