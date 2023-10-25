@@ -37,10 +37,10 @@ pipeline {
                 '''
             }
         }
-        stage ("Kill All Running Containers") {
+        stage ("Kill and Remove All Containers") {
             steps {
                 sh '''
-                    docker ps -aq | xargs docker stop | xargs docker rmg
+                    docker ps -aq | xargs docker stop | xargs docker rm
                 '''
             }
 
