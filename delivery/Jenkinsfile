@@ -37,7 +37,15 @@ pipeline {
                 '''
             }
         }
-        stage ("Run Container") {
+        stage ("Kill All Running Containers") {
+            steps {
+                sh '''
+                    docker kill $(docker ps -q)
+                '''
+            }
+
+        }
+        stage ("Run Tomcat Server") {
             steps {
                 sh '''
                     docker run -itd -p 9090:9090 ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
