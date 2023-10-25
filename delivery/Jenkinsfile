@@ -7,7 +7,8 @@ pipeline {
         AWS_SECRET_ACCESS_KEY = credentials("aws-secret-access-key")
         AWS_DEFAULT_REGION = "eu-west-1"
         IMAGE_REPOSITORY_NAME = "ct5171-devops-assignment"
-     }
+        IMAGE_TAG = "latest"
+    }
 
     stages {
         stage ("Build Package") {
@@ -25,14 +26,22 @@ pipeline {
                 '''
             }
         }
-        stage ("Build Image and Push to ECR") {
+        stage ("Build Docker Image and Push to Registry") {
             steps {
                 sh '''
                     DOCKER_BUILDKIT=1 docker build . \
-                    -t ct5171-devops-assignment:latest
+                        -t ${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
 
-                    docker tag ct5171-devops-assignment:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/ct5171-devops-assignment:latest
-                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/ct5171-devops-assignment:latest
+                    docker tag ${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
+                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
+                '''
+            }
+        }
+        stage ("Run Container") {
+            steps {
+                sh '''
+                    docker run ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG} \
+                        -p 9000:8080
                 '''
             }
         }
