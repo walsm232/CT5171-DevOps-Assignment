@@ -49,9 +49,9 @@ pipeline {
                     script {
                         def userInput = input(
                                 id: 'deployConfirmation',
-                                message: 'Do you want to deploy?',
+                                message: 'Do you want to trigger a deployment?',
                                 parameters: [
-                                        [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Deploy', name: 'DEPLOY']
+                                        [$class: 'BooleanParameterDefinition', defaultValue: false, name: 'DEPLOY']
                                 ]
                         )
 
@@ -60,6 +60,7 @@ pipeline {
                         }
 
                         env.DEPLOY = userInput
+                        echo "DEPLOY value in condition: ${env.DEPLOY}"
                     }
                 }
             }
