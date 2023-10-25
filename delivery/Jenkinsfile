@@ -30,13 +30,20 @@ pipeline {
                 }
             }
         }
-        stage ("Build Docker Image and Push to Registry") {
+        stage ("Build Docker Image") {
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
                     sh '''
                         DOCKER_BUILDKIT=1 docker build . \
                             -t ${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
-    
+                    '''
+                }
+            }
+        }
+        stage ("Push to AWS ECR") {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    sh '''    
                         docker tag ${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
                         docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
                     '''
@@ -48,18 +55,10 @@ pipeline {
                 timeout(time: 15, unit: 'MINUTES') {
                     script {
                         def userInput = input(
-                                id: 'deployConfirmation',
-                                message: 'Do you want to trigger a deployment?',
-                                parameters: [
-                                        [$class: 'BooleanParameterDefinition', defaultValue: false, name: 'DEPLOY']
-                                ]
-                        )
-
-                        if (userInput == null) {
-                            error('Deployment confirmation timeout')
-                        }
-
-                        env.DEPLOY = userInput
+                                id: 'deployConfirm', message: 'Do you want to perform a deployment?', parameters: [
+                                [$class: 'BooleanParameterDefinition', defaultValue: false, name: 'deploy']
+                        ])
+                        env.DEPLOY = userInput.deploy ? 'true' : 'false'
                     }
                 }
             }
@@ -67,15 +66,16 @@ pipeline {
         stage ("Deploy Container") {
             when {
                 expression {
-                    echo "DEPLOY value in condition: ${env.DEPLOY}"
-                    env.DEPLOY == true
+                    return env.DEPLOY == 'true'
                 }
             }
             steps {
-                sh '''
-                    docker ps -aq | xargs docker stop | xargs docker rm
-                    docker run -itd -p 9090:9090 ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
-                '''
+                timeout(time: 5, unit: 'MINUTES') {
+                    sh '''
+                        docker ps -aq | xargs docker stop | xargs docker rm
+                        docker run -itd -p 9090:9090 ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
+                    '''
+                }
             }
         }
     }
