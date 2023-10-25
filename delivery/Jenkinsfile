@@ -37,15 +37,27 @@ pipeline {
                 '''
             }
         }
+        stage('Deployment Confirmation') {
+            steps {
+                input(message: 'Do you want to deploy?', parameters: [
+                        [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Deploy', name: 'DEPLOY']
+                ])
+            }
+        }
         stage ("Kill and Remove All Containers") {
+            expression {
+                params.DEPLOY == true
+            }
             steps {
                 sh '''
                     docker ps -aq | xargs docker stop | xargs docker rm
                 '''
             }
-
         }
         stage ("Run Tomcat Server") {
+            expression {
+                params.DEPLOY == true
+            }
             steps {
                 sh '''
                     docker run -itd -p 9090:9090 ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
