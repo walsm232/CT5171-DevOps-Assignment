@@ -60,7 +60,6 @@ pipeline {
                         }
 
                         env.DEPLOY = userInput
-                        echo "DEPLOY value in condition: ${env.DEPLOY}"
                     }
                 }
             }
@@ -68,6 +67,7 @@ pipeline {
         stage ("Deploy Container") {
             when {
                 expression {
+                    echo "DEPLOY value in condition: ${env.DEPLOY}"
                     env.DEPLOY == true
                 }
             }
