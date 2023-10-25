@@ -54,12 +54,20 @@ pipeline {
             steps {
                 timeout(time: 15, unit: 'MINUTES') {
                     script {
-                        input('Do you want to trigger a deployment?')
+                        env.DEPLOY = input(
+                                id: 'deployConfirm', message: 'Do you want to trigger a deployment?', parameters: [
+                                [$class: 'BooleanParameterDefinition', defaultValue: false, name: 'deploy']
+                        ])
                     }
                 }
             }
         }
         stage ("Deploy Container") {
+            when {
+                expression {
+                    env.DEPLOY == true
+                }
+            }
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
                     sh '''
