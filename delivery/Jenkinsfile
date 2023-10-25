@@ -13,14 +13,14 @@ pipeline {
     stages {
         stage ("Build Package") {
             steps {
-                timeout(time: 10, unit: 'MINUTES') {
+                timeout(time: 10, unit: "MINUTES") {
                     sh "mvn clean install"
                 }
             }
         }
         stage ("Login to AWS ECR") {
             steps {
-                timeout(time: 1, unit: 'MINUTES') {
+                timeout(time: 1, unit: "MINUTES") {
                     sh '''
                         aws ecr get-login-password \
                             --region ${AWS_DEFAULT_REGION} | docker login \
@@ -32,7 +32,7 @@ pipeline {
         }
         stage ("Build Docker Image") {
             steps {
-                timeout(time: 5, unit: 'MINUTES') {
+                timeout(time: 5, unit: "MINUTES") {
                     sh '''
                         DOCKER_BUILDKIT=1 docker build . \
                             -t ${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
@@ -42,7 +42,7 @@ pipeline {
         }
         stage ("Push to AWS ECR") {
             steps {
-                timeout(time: 2, unit: 'MINUTES') {
+                timeout(time: 2, unit: "MINUTES") {
                     sh '''    
                         docker tag ${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
                         docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
@@ -52,11 +52,11 @@ pipeline {
         }
         stage("Deployment Confirmation") {
             steps {
-                timeout(time: 15, unit: 'MINUTES') {
+                timeout(time: 15, unit: "MINUTES") {
                     script {
                         env.DEPLOY = input(
-                                id: 'deployConfirm', message: 'Do you want to trigger a deployment?', parameters: [
-                                [$class: 'BooleanParameterDefinition', defaultValue: false, name: 'deploy']
+                                id: "deployConfirm", message: "Do you want to trigger a deployment?", parameters: [
+                                [$class: "BooleanParameterDefinition", defaultValue: false, name: "Deploy"]
                         ])
                     }
                 }
@@ -69,7 +69,7 @@ pipeline {
                 }
             }
             steps {
-                timeout(time: 5, unit: 'MINUTES') {
+                timeout(time: 5, unit: "MINUTES") {
                     sh '''
                         docker ps -aq | xargs docker stop | xargs docker rm
                         docker run -itd -p 9090:9090 ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
