@@ -65,7 +65,7 @@ pipeline {
         stage ("Deploy Container") {
             when {
                 expression {
-                    env.DEPLOY == true
+                    env.DEPLOY.toBoolean()
                 }
             }
             steps {
