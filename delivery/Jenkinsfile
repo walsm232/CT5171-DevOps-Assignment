@@ -55,7 +55,7 @@ pipeline {
                 timeout(time: 15, unit: 'MINUTES') {
                     script {
                         def userInput = input(
-                                id: 'deployConfirm', message: 'Do you want to perform a deployment?', parameters: [
+                                id: 'deploy', message: 'Do you want to perform a deployment?', parameters: [
                                 [$class: 'BooleanParameterDefinition', defaultValue: false, name: 'deploy']
                         ])
                         env.DEPLOY = userInput.deploy ? 'true' : 'false'
