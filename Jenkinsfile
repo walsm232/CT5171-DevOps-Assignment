@@ -34,7 +34,7 @@ pipeline {
                 timeout(time: 5, unit: "MINUTES") {
                     sh '''
                         DOCKER_BUILDKIT=1 docker build . \
-                            -t ${IMAGE_REPOSITORY_NAME}:${BUILD_VERSION}
+                            -t ${IMAGE_REPOSITORY_NAME}:${BUILD_NUMBER}
                     '''
                 }
             }
@@ -43,8 +43,8 @@ pipeline {
             steps {
                 timeout(time: 2, unit: "MINUTES") {
                     sh '''    
-                        docker tag ${IMAGE_REPOSITORY_NAME}:${BUILD_VERSION} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${BUILD_VERSION}
-                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${BUILD_VERSION}
+                        docker tag ${IMAGE_REPOSITORY_NAME}:${BUILD_NUMBER} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${BUILD_NUMBER}
+                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${BUILD_NUMBER}
                     '''
                 }
             }
@@ -71,7 +71,7 @@ pipeline {
                 timeout(time: 5, unit: "MINUTES") {
                     sh '''
                         docker ps -aq | xargs docker stop | xargs docker rm
-                        docker run -d -p 9090:9090 ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${BUILD_VERSION}
+                        docker run -d -p 9090:9090 ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${BUILD_NUMBER}
                     '''
                 }
             }
