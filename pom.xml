@@ -9,11 +9,11 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>ct5171-devops-assignment</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>michaelspetitions</artifactId>
+	<version>0.0.1</version>
 	<packaging>war</packaging>
-	<name>ct5171-devops-assignment</name>
-	<description>CT5171 DevOps Assignment</description>
+	<name>michaelspetitions</name>
+	<description>Michael's Petitions</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
