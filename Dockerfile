@@ -1,7 +1,7 @@
 #FROM tomcat:9.0.82-jdk17-corretto
 FROM tomcat:latest
 
-ADD target/*.war /usr/local/tomcat/webapps/
+ADD target/michaelspetitions.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 9090
 
