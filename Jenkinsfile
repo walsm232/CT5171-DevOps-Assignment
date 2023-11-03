@@ -72,7 +72,7 @@ pipeline {
                 timeout(time: 5, unit: "MINUTES") {
                     sh '''
                         docker ps -aq | xargs docker stop | xargs docker rm
-                        docker run -itd -p 9090:9090 ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
+                        docker run -itd -p 9090:8080 ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
                     '''
                 }
             }

@@ -2,8 +2,6 @@ FROM tomcat:9.0.82-jdk17-corretto
 
 COPY target/michaelspetitions.war /usr/local/tomcat/webapps/
 
-RUN sed -i -e 's/8080/9090/' /usr/local/tomcat/conf/server.xml
-
-EXPOSE 9090
+EXPOSE 8080
 
 CMD ["catalina.sh", "run"]
