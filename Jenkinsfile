@@ -78,7 +78,7 @@ pipeline {
                 timeout(time: 5, unit: "MINUTES") {
                     sh '''
                         docker ps -aq | xargs docker stop | xargs docker rm
-                        docker run -d -p 9090:8080 ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${BUILD_NUMBER}
+                        docker run -d -p 9090:8080 --detach ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${BUILD_NUMBER}
                     '''
                 }
             }

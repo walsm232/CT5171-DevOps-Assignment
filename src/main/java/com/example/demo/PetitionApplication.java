@@ -28,9 +28,6 @@ public class PetitionApplication {
 
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(PetitionApplication.class);
-
-		app.setDefaultProperties(Collections
-				.singletonMap("server.port", "9090"));
 		app.run(args);
 	}
 
