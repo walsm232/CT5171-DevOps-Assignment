@@ -10,10 +10,17 @@ pipeline {
     }
 
     stages {
-        stage ("Build Package") {
+        stage ("Build") {
             steps {
                 timeout(time: 10, unit: "MINUTES") {
-                    sh "mvn clean install"
+                    sh "mvn clean"
+                }
+            }
+        }
+        stage ("Package") {
+            steps {
+                timeout(time: 10, unit: "MINUTES") {
+                    sh "mvn package"
                 }
             }
         }
