@@ -13,9 +13,16 @@ import java.util.*;
 public class PetitionApplication {
 
 	@RequestMapping("/")
-	public ModelAndView viewPetitions() {
+	public ModelAndView home() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("home.html");
+		return modelAndView;
+	}
+
+	@RequestMapping("/view")
+	public ModelAndView viewPetitions() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("view-petitions.html");
 		return modelAndView;
 	}
 
