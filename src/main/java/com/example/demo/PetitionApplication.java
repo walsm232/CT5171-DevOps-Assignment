@@ -2,6 +2,7 @@ package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,19 +14,17 @@ import java.util.*;
 public class PetitionApplication {
 
 	@RequestMapping("/")
-	public String home() {
-		return "Home";
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.setViewName("home.html");
-//		return modelAndView;
+	public ModelAndView home() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("home.html");
+		return modelAndView;
 	}
 
 	@RequestMapping("/view")
-	public String viewPetitions() {
-		return "View";
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.setViewName("view-petitions.html");
-//		return modelAndView;
+	public ModelAndView viewPetitions() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("view-petitions.html");
+		return modelAndView;
 	}
 
 	public static void main(String[] args) {
@@ -33,4 +32,4 @@ public class PetitionApplication {
 		app.run(args);
 	}
 
-}
+}g
