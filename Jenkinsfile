@@ -7,7 +7,7 @@ pipeline {
         AWS_SECRET_ACCESS_KEY = credentials("aws-secret-access-key")
         AWS_DEFAULT_REGION = "eu-west-1"
         IMAGE_REPOSITORY_NAME = "ct5171-devops-assignment"
-        IMAGE_VERSION = "latest"
+        IMAGE_TAG = "latest"
     }
 
     stages {
@@ -42,7 +42,7 @@ pipeline {
                 timeout(time: 5, unit: "MINUTES") {
                     sh '''
                         DOCKER_BUILDKIT=1 docker build . \
-                            -t ${IMAGE_REPOSITORY_NAME}:${IMAGE_VERSION}
+                            -t ${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
                     '''
                 }
             }
@@ -51,8 +51,8 @@ pipeline {
             steps {
                 timeout(time: 2, unit: "MINUTES") {
                     sh '''    
-                        docker tag ${IMAGE_REPOSITORY_NAME}:${IMAGE_VERSION} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_VERSION}
-                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_VERSION}
+                        docker tag ${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
+                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
                     '''
                 }
             }
@@ -79,7 +79,7 @@ pipeline {
                 timeout(time: 5, unit: "MINUTES") {
                     sh '''
                         docker ps -aq | xargs docker stop | xargs docker rm
-                        docker run -d -p 9090:8080 --detach ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_VERSION}
+                        docker run -d -p 9090:8080 --detach ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPOSITORY_NAME}:${IMAGE_TAG}
                     '''
                 }
             }
