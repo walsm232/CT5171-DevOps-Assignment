@@ -13,17 +13,19 @@ import java.util.*;
 public class PetitionApplication {
 
 	@RequestMapping("/")
-	public ModelAndView home() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("home.html");
-		return modelAndView;
+	public String home() {
+		return "Home";
+//		ModelAndView modelAndView = new ModelAndView();
+//		modelAndView.setViewName("home.html");
+//		return modelAndView;
 	}
 
 	@RequestMapping("/view")
-	public ModelAndView viewPetitions() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("view-petitions.html");
-		return modelAndView;
+	public String viewPetitions() {
+		return "View";
+//		ModelAndView modelAndView = new ModelAndView();
+//		modelAndView.setViewName("view-petitions.html");
+//		return modelAndView;
 	}
 
 	public static void main(String[] args) {
