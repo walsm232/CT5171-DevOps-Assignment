@@ -7,6 +7,14 @@
     --primary-light-blue: #2C8EF1;
 }
 
+body {
+    background-image: url("images/background-image.jpeg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    position: relative;
+}
+
 nav {
     z-index: 2;
 }
