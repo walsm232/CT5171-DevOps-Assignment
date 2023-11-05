@@ -37,5 +37,36 @@
             </ul>
         </div>
     </nav>
+
+    <br>
+    
+    <section id="create-petition">
+        <div class="container px-4">
+            <div class="row gx-4 mt-5 justify-content-center">
+                <div class="col-lg-12">
+                    <h2> Create a Petition </h2>
+                </div>
+            </div>
+            <form>
+                <div class="mb-3 mt-3">
+                    <label for="petitionName" class="form-label"> Name of Petition </label>
+                    <input type="text" class="form-control" id="petitionName">
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="petitionDescription" class="form-label"> Description of Petition </label>
+                    <input type="text" class="form-control" id="petitionDescription">
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="petitionScope" class="form-label"> Select the scope of your petition </label>
+                    <select class="form-select" aria-label="petitionScope" id="petitionScope">
+                        <option value="local" selected> Local </option>
+                        <option value="national"> National </option>
+                        <option value="global"> Global </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary"> Create </button>
+            </form>
+        </div>
+    </section>
 </body>
 </html>
