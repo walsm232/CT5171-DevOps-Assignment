@@ -20,14 +20,14 @@ public class PetitionApplication {
 		return modelAndView;
 	}
 
-	@RequestMapping("/michaelspetitions/view")
+	@RequestMapping("/view")
 	public ModelAndView viewPetitions() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("view-petitions.html");
 		return modelAndView;
 	}
 
-	@RequestMapping("/michaelspetitions/create")
+	@RequestMapping("/create")
 	public ModelAndView createPetition() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("create-petition.html");
