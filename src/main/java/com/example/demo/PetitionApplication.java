@@ -27,6 +27,13 @@ public class PetitionApplication {
 		return modelAndView;
 	}
 
+	@RequestMapping("/create")
+	public ModelAndView createPetition() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("create-petition.html");
+		return modelAndView;
+	}
+
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(PetitionApplication.class);
 		app.run(args);
