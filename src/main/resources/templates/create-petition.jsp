@@ -47,7 +47,7 @@
                 <h2> Create a Petition </h2>
             </div>
         </div>
-        <form action="#" th:action="@{/michaelspetitions/create}" th:object="${petition}" method="POST">
+        <form action="#" th:action="@{/create}" th:object="${petition}" method="POST">
             <div class="mb-3 mt-3">
                 <label for="name" class="form-label"> Name of Petition </label>
                 <input type="text" class="form-control" id="name" th:field="*{name}"/>
