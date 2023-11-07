@@ -1,0 +1,72 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <title> Michael's Petitions </title>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-top">
+    <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-between align-items-center w-100" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto text-md-center text-left">
+            <li class="nav-item active">
+                <a class="nav-link" href="/michaelspetitions"> Home </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/michaelspetitions/view"> View </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/michaelspetitions/create"> Create </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<br>
+
+<section id="create-petition">
+    <div class="container px-4">
+        <div class="row gx-4 mt-5 justify-content-center">
+            <div class="col-lg-12">
+                <h2> Create a Petition </h2>
+            </div>
+        </div>
+        <form action="#" th:action="@{/michaelspetitions/create}" th:object="${petition}" method="POST">
+            <div class="mb-3 mt-3">
+                <label for="name" class="form-label"> Name of Petition </label>
+                <input type="text" class="form-control" id="name" th:field="*{name}"/>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="description" class="form-label"> Description of Petition </label>
+                <textarea class="form-control" id="description" rows="3" th:field="*{description}"> </textarea>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="scope" class="form-label"> Select the scope of your petition </label>
+                <select class="form-select" aria-label="scope" id="scope" th:field="*{scope}">
+                    <option value="local"> Local </option>
+                    <option value="national"> National </option>
+                    <option value="global"> Global </option>
+                </select>
+            </div>
+            <button type="submit" value="submit" class="btn btn-primary"> Create </button>
+        </form>
+    </div>
+</section>
+</body>
+</html>
