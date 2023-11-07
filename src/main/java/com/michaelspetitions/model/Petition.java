@@ -8,6 +8,13 @@ public class Petition {
     private String scope;
 
     public Petition() {}
+
+    public Petition(String id, String name, String description, String scope) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.scope = scope;
+    }
     public String getId() {
         return id;
     }
