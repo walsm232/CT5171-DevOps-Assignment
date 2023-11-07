@@ -4,6 +4,7 @@ import com.michaelspetitions.model.Petition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PetitionController {
 
     private final Logger LOG = LoggerFactory.getLogger(PetitionController.class);
-    private Map<String, Petition> petitions = new ConcurrentHashMap<>();
+    private final Map<String, Petition> petitionsMap = new ConcurrentHashMap<>();
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String homePage() {
@@ -27,7 +28,8 @@ public class PetitionController {
     }
 
     @RequestMapping(value = "/view", method = RequestMethod.GET)
-    public String viewPetitionsPage() {
+    public String viewPetitionsPage(Model model) {
+        model.addAttribute("petitionsMap", petitionsMap);
         return "view-petitions";
     }
 
@@ -43,7 +45,7 @@ public class PetitionController {
         String petitionId = UUID.randomUUID().toString();
         petition.setId(petitionId);
 
-        petitions.put(petitionId, petition);
+        petitionsMap.put(petitionId, petition);
 
         // LOG.info("Id: {}, Petition Name: {}, description: {}, scope:{}", petition.getId(), petition.getName(), petition.getDescription(), petition.getScope());
 
