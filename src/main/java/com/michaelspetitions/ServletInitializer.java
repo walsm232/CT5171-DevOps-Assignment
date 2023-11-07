@@ -1,6 +1,6 @@
 package com.michaelspetitions;
 
-//import com.michaelspetitions.controller.PetitionController;
+import com.michaelspetitions.controller.PetitionController;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
