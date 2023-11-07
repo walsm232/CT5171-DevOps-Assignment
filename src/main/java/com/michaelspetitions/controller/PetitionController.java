@@ -3,15 +3,19 @@ package com.michaelspetitions.controller;
 import com.michaelspetitions.model.Petition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-@RestController
+@Controller
 public class PetitionController {
 
     private final Logger LOG = LoggerFactory.getLogger(PetitionController.class);
