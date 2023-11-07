@@ -1,5 +1,6 @@
-package com.michaelspetitions.controller;
+package com.michaelspetitions;
 
+//import com.michaelspetitions.controller.PetitionController;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
@@ -7,7 +8,7 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(PetitionController.class);
+		return application.sources(PetitionApplication.class);
 	}
 
 }
