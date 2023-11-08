@@ -47,8 +47,6 @@ public class PetitionController {
 
         petitionsMap.put(petitionId, petition);
 
-        // LOG.info("Id: {}, Petition Name: {}, description: {}, scope:{}", petition.getId(), petition.getName(), petition.getDescription(), petition.getScope());
-
         return "petition-created";
     }
 
