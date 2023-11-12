@@ -50,7 +50,6 @@ public class PetitionController {
         return "petition-created";
     }
 
-
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String searchPetitionsPage(ModelMap model) {
         model.addAttribute("petitionSearch", new PetitionSearch());
