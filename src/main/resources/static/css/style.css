@@ -48,3 +48,12 @@ nav ul li {
     box-shadow: 0 0 0 1px #4dd0e1;
     width: 50%;
 }
+
+.navbar-toggler {
+    background-color: #53595c;
+    border: none;
+}
+
+.navbar-toggler-icon {
+    background-color: var(--primary-dark);
+}
