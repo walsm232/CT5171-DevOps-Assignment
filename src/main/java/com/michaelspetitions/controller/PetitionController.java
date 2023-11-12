@@ -40,7 +40,7 @@ public class PetitionController {
         return "create-petition";
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create/new")
     public String createPetition(@ModelAttribute("petition") Petition petition) {
 
         String petitionId = UUID.randomUUID().toString();
