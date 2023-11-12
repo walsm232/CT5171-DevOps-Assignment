@@ -15,61 +15,103 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-top">
-  <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse justify-content-between align-items-center w-100" id="navbarSupportedContent">
-    <ul class="navbar-nav mx-auto text-md-center text-left">
-      <li class="nav-item active">
-        <a class="nav-link" href="/michaelspetitions"> Home </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/michaelspetitions/view"> View </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/michaelspetitions/create"> Create </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/michaelspetitions/search"> Search </a>
-      </li>
-    </ul>
-  </div>
-</nav>
-
-<br>
-<header class="bg-primary bg-gradient text-white">
-  <div class="container px-4 mt-5 text-center">
-    <h1 class="fw-bolder"> Michael's Petitions </h1>
-  </div>
-</header>
-
-<br>
-
-<section id="view-petition">
-  <div class="container mt-2 px-4">
-    <div class="row gx-4 justify-content-center">
-      <div class="col-lg-12">
-        <h2> Petition Information </h2>
-      </div>
+  <nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-top">
+    <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-between align-items-center w-100" id="navbarSupportedContent">
+      <ul class="navbar-nav mx-auto text-md-center text-left">
+        <li class="nav-item active">
+          <a class="nav-link" href="/michaelspetitions"> Home </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/michaelspetitions/view"> View </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/michaelspetitions/create"> Create </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/michaelspetitions/search"> Search </a>
+        </li>
+      </ul>
     </div>
-    <div class="container mt-2">
-      <div class="row">
-        <div class="card">
-          <div class="card-body">
-            <h5 th:text="${petition.name}" class="card-title"></h5>
-            <p th:text="${petition.description}" class="card-text"></p>
-            <p th:text="${petition.scope}" class="card-text"></p>
+  </nav>
+
+  <br>
+  <header class="bg-primary bg-gradient text-white">
+    <div class="container px-4 mt-5 text-center">
+      <h1 class="fw-bolder"> Michael's Petitions </h1>
+    </div>
+  </header>
+
+  <br>
+
+  <section id="view-petition">
+    <div class="container mt-2 px-4">
+      <div class="row gx-4 justify-content-center">
+        <div class="col-lg-12">
+          <h2> Petition Information </h2>
+        </div>
+      </div>
+      <div class="container mt-2">
+        <div class="row">
+          <div class="card">
+            <div class="card-body">
+              <h5 th:text="${petition.name}" class="card-title text-center"></h5>
+              <p th:text="${petition.description}" class="card-text text-center"></p>
+              <p th:text="${petition.scope}" class="card-text text-center"></p>
+              <hr>
+              <br>
+              <h4> Signatures </h4>
+              <table class="table">
+                <thead>
+                <tr>
+                  <th> Name </th>
+                  <th> Email </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="signature : ${petition.signatures}">
+                  <td th:text="${signature.name}"></td>
+                  <td th:text="${signature.email}"></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
+      <div class="row gx-4 mt-4 justify-content-center">
+        <div class="col-lg-12">
+          <h2> Sign Petition </h2>
+        </div>
+      </div>
+      <form th:action="@{/petition/{id}/sign(id=${petition.id})}" method="POST">
+        <div class="container mt-2 px-4">
+          <div class="row gx-4">
+            <div class="col-lg-12">
+              <div class="active-cyan-3 active-cyan-4 mb-4">
+                <div class="form-group">
+                  <label for="name">Name:</label>
+                  <input type="text" size="50" id="name" name="name" class="form-control" required />
+                </div>
+                <div class="form-group mt-2">
+                  <label for="email">Email:</label>
+                  <input type="text" size="50" id="email" name="email" class="form-control" required />
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary"> Sign Petition </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
-  </div>
-</section>
+  </section>
 </body>
 </html>
