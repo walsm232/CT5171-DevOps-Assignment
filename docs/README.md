@@ -36,7 +36,7 @@ The web app contains a number of paths which allow users to:
 
 ## Post Mappings
 ```
-/create
+/create/new
 ```
 - This takes user input for petition name, description, and scope and creates the petition.
 ```
