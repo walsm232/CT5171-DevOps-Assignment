@@ -55,24 +55,24 @@
         <div class="container mt-2 px-4">
             <div class="row gx-4 justify-content-center">
                 <div class="col-lg-12">
-                    <h2> Search Petitions </h2>
+                    <h2> Search Results </h2>
                 </div>
             </div>
         </div>
-        <form action="#" th:action="@{/search/results}" th:object="${petitionSearch}" method="POST">
-            <div class="container mt-2 px-4">
-                <div class="row gx-4 justify-content-center">
-                    <div class="col-lg-12">
-                        <div class="active-cyan-3 active-cyan-4 mb-4 d-flex align-items-center flex-nowrap">
-                            <input class="form-control" type="text" aria-label="Search" th:field="*{query}">
-                            <button type="submit" value="submit" class="btn btn-primary">
-                                <i class="fas fa-search"></i>
-                            </button>
+        <div class="container mt-2">
+            <div class="row">
+                <div th:each="result : ${results}" class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 th:text="${result.name}" class="card-title"></h5>
+                            <p th:text="${result.description}" class="card-text"></p>
+                            <p th:text="${result.scope}" class="card-text"></p>
+                            <a th:href="@{/petition/{id}(id=${result.id})}" class="btn btn-primary"> More Info </a>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </section>
 
 </body>

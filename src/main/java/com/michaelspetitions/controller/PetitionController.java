@@ -1,6 +1,7 @@
 package com.michaelspetitions.controller;
 
 import com.michaelspetitions.model.Petition;
+import com.michaelspetitions.model.PetitionSearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,10 +53,28 @@ public class PetitionController {
         return "petition-created";
     }
 
+
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String searchPetitionsPage(ModelMap model) {
-        model.addAttribute("petition", new Petition());
+        model.addAttribute("petitionSearch", new PetitionSearch());
         return "search-petitions";
+    }
+
+    @PostMapping("/search/results")
+    public String searchPetitions(@ModelAttribute("petitionSearch") PetitionSearch petitionSearch, ModelMap model) {
+        String query = petitionSearch.getQuery();
+
+        List<Petition> results = new ArrayList<>();
+
+        for (Petition petition : petitionsMap.values()) {
+            if (petition.getName().contains(query) || petition.getDescription().contains(query) || petition.getScope().contains(query)) {
+                results.add(petition);
+            }
+        }
+
+        model.addAttribute("results", results);
+
+        return "search-results";
     }
 
 }
