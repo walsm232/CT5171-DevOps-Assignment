@@ -66,6 +66,7 @@
                                 <h5 th:text="${petitionEntry.value.name}" class="card-title"></h5>
                                 <p th:text="${petitionEntry.value.description}" class="card-text"></p>
                                 <p th:text="${petitionEntry.value.scope}" class="card-text"></p>
+                                <a th:href="@{/petition/{id}(id=${petitionEntry.value.id})}" class="btn btn-primary"> More Info </a>
                             </div>
                         </div>
                     </div>
