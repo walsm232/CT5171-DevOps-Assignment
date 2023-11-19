@@ -51,7 +51,7 @@ The web app contains a number of paths which allow users to:
 ## Software Delivery
 Jenkins is used for Continuous Integration (CI) and Continuous Delivery (CD) for this project. Jenkins is run on an EC2 instance where the web application is also deployed.
 
-The web application is containerized using Docker as part of the build, using a tomcat image as the base. The image is pushed to AWS Elastic Container Registry (ECR) for future use and is deployed to the EC2 instance via Jenkins.
+The web application is containerized using Docker as part of the build with a tomcat image as the base. The image is pushed to AWS Elastic Container Registry (ECR) for future use and is deployed to the EC2 instance via Jenkins. For cost-saving purposes we are only tagging the images with the **latest** tag, but in an industry setting each image would likely be tagged with some form of a build number or version.
 
 When changes are pushed to __master__ in the repository, a Jenkins build is automatically triggered via a webhook. The list of all stages in this delivery process are below.
 
