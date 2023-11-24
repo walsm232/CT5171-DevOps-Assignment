@@ -12,7 +12,7 @@ The web app contains a number of paths which allow users to:
 - Search Petitions and View Results
 - Sign Petitions
 
-## Request Mappings
+## GET Mappings
 ```
 /
 ```
@@ -34,7 +34,7 @@ The web app contains a number of paths which allow users to:
 ```
 - This returns a specific petition for a given ID, where the ID is the UUID of the petition.
 
-## Post Mappings
+## POST Mappings
 ```
 /create/new
 ```
