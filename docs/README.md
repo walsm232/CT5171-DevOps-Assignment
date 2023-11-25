@@ -30,7 +30,7 @@ The web app contains a number of paths which allow users to:
 ```
 - This provides a search bar so that users can enter a query to search through all petitions on the site.
 ```
-/petitions/{id}
+/petition/{id}
 ```
 - This returns a specific petition for a given ID, where the ID is the UUID of the petition.
 
